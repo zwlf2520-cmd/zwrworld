@@ -1,4 +1,4 @@
-# Java 的 synchronized 是怎么实现的？
+# Java 的 synchronized 是怎么实现的？-- 需要好好理解
 
 ## 回答重点
 
@@ -6,7 +6,7 @@
 
 当 `synchronized` 修饰在方法或代码块上时，会对特定的对象或类加锁，从而确保同一时刻只有一个线程能执行加锁的代码块。
 
-* **synchronized 修饰方法**：会在方法的访问标志中增加一个 `ACC_SYNCHRONIZED` 标志。每当一个线程访问该方法时，JVM 会检查方法的访问标志。如果包含 `ACC_SYNCHRONIZED` 标志，线程必须先获得该方法对应的对象的监视器锁（即对象锁），然后才能执行该方法，从而保证方法的同步性。
+* **synchronized 修饰方法**：会在方法的访问标志中增加一个 `ACC_SYNCHRONIZED` 标志。每当一个线程访问该方法时，JVM 会检查方法的访问标志。如果包含 `ACC_SYNCHRONIZED` 标志，线程必须先获得该方法**对应的对象的监视器锁**（即对象锁），然后才能执行该方法，从而保证方法的同步性。
 * **synchronized 修饰代码块**：会在代码块的前后插入 `monitorenter` 和 `monitorexit` 字节码指令。可以把 `monitorenter` 理解为加锁，`monitorexit`理解为解锁。
 
 ## 扩展知识
@@ -24,7 +24,6 @@ Mark Word 是实现 synchronized 的关键，因为它会根据锁的状态保�
 * 偏向锁状态：Mark Word 保存获取该锁的线程 ID 和一些偏向锁标志位。
 * 轻量级锁状态：Mark Word 存储的是指向栈中锁记录的指针。
 * 重量级锁状态：Mark Word 存储的是指向 Monitor 对象的指针。
-
 
 ### 锁的升级与优化
 
@@ -45,7 +44,6 @@ Mark Word 是实现 synchronized 的关键，因为它会根据锁的状态保�
 * 解锁过程：线程退出同步块时，JVM 会将对象头中的 Mark Word 恢复为原始值。
 
 #### 重量级锁（Heavyweight Locking）
-
 
 当锁竞争激烈时，JVM 会升级为重量级锁，重量级锁使用操作系统的**互斥量（Mutex）** 机制来实现线程的阻塞与唤醒。
 
